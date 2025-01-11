@@ -9,6 +9,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { usePledge } from '@/context/PledgeContext';
 
 export default function Home() {
   const [isChecklistOpen, setIsChecklistOpen] = useState(false);
@@ -18,6 +19,7 @@ export default function Home() {
   const router = useRouter();
   const { data: session } = useSession();
   const [events, setEvents] = useState([]);
+  const { globalPledge } = usePledge();
 
   useEffect(() => {
     console.log("Session data:", session);
@@ -68,7 +70,7 @@ export default function Home() {
             {session?.user?.name || "게스트"}
           </span>
           <div>
-            <p>갓생을 목표로 살자</p>
+            <p id="goal">{globalPledge}</p>
           </div>
           <Dropdown>
             <DropdownTrigger>

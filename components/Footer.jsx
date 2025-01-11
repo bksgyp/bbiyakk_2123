@@ -10,7 +10,7 @@ export default function Footer() {
     const [activeButton, setActiveButton] = useState(1)
     const buttons = [
         { id: 1, src: "/home.png", alt: "home", link: "/" },
-        { id: 2, src: "/group.png", alt: "group", link: "/Group" },
+        { id: 2, src: "/group.png", alt: "group", link: "/group" },
         { id: 3, src: "/search.png", alt: "search", link: "/search" },
         { id: 4, src: "/setting.png", alt: "setting", link: "/settings" },
     ]
