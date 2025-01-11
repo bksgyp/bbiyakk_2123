@@ -2,15 +2,12 @@ import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { Link } from "@nextui-org/link";
 import clsx from "clsx";
-
+import Footer from "@/components/Footer";
 import { Providers } from "./providers";
-import Head from "next/head";
-
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
-
-import localFont from "next/font/local"
+import localFont from "next/font/local";
 import SessionWrapper from "@/components/SessionWrapper";
 
 const pretendard = localFont({
@@ -51,18 +48,16 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en" className={`${pretendard.variable}`}>
-      <Head>
-        <meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=no;" />
-      </Head>
       <body
         className={`
           h-[100dvh] bg-black antialiased ${pretendard.className}`}
       >
         <SessionWrapper>
           <div className="relative flex flex-col h-[100dvh] items-center">
-            <main id="size" className="relative max-w-[768px] w-screen h-full bg-white px-5 pb-[30px] ">
+            <main id="size" className="relative max-w-[768px] w-screen h-full bg-white px-5 pb-[30px]">
               {children}
             </main>
+            <Footer />
           </div>
         </SessionWrapper>
       </body>

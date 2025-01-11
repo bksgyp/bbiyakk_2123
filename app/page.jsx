@@ -6,7 +6,7 @@ import Checklist from '@/components/checklist';
 import Category from '@/components/Category';
 import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
-import { Avatar } from '@nextui-org/react';
+import { Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
@@ -50,8 +50,43 @@ export default function Home() {
   };
 
   return (
-    <div className='w-full h-full mb-[10px]' onClick={closeChecklist}>
-      <Image
+    <div className='w-full h-full mb-[10px] pt-48' onClick={closeChecklist}>
+      <div className="absolute top-0 left-0 flex items-start gap-4 mb-6 mt-4 px-8 pl-10 pt-10">
+        <Avatar
+          className='w-[80px] h-[80px]'
+          src={session?.user?.image}
+          onClick={() => {
+            if (session) {
+              router.push('/settings');
+            } else {
+              router.push('/login');
+            }
+          }}
+        />
+        <div className="flex flex-col">
+          <span className="text-2xl font-semibold">
+            {session?.user?.name || "게스트"}
+          </span>
+          <div>
+            <p>갓생을 목표로 살자</p>
+          </div>
+          <Dropdown>
+            <DropdownTrigger>
+              <span className="text-sm text-gray-500 cursor-pointer">
+                전체 ▼
+              </span>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Calendar Actions">
+              <DropdownItem key="personal">개인 일정</DropdownItem>
+              <DropdownItem key="work">업무 일정</DropdownItem>
+              <DropdownItem key="family">가족 일정</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+        
+      </div>
+
+      {/* <Image
         src="/menu.png"
         alt="menu"
         width={25}
@@ -61,18 +96,8 @@ export default function Home() {
           toggleChecklist();
         }}
         className='absolute top-3 left-6 cursor-pointer'
-      />
-      <Avatar
-        className='absolute top-1 right-6 cursor-pointer w-[33px] h-[33px]'
-        src={session?.user?.image}
-        onClick={() => {
-          if (session) {
-            router.push('/settings');
-          } else {
-            router.push('/login');
-          }
-        }}
-      />
+      /> */}
+      
       <div
         className={`absolute top-0 left-0 h-full w-full bg-white transition-transform transform ${isChecklistOpen ? 'translate-x-0' : '-translate-x-full'} z-50`}
         onClick={(e) => e.stopPropagation()}
@@ -88,6 +113,10 @@ export default function Home() {
         </div>
       </div>
       <FullCalendar setEvents={setEvents} events={events}/>
+
+      {/* <div className="flex justify-center">
+        <FullCalendar setEvents={setEvents} events={events}/>
+      </div> */}
     </div>
   );
 }

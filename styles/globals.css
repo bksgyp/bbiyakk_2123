@@ -93,3 +93,72 @@ body {
 input, textarea {
   font-size: 12px !important;
 }
+
+.fc .fc-toolbar-title {
+  text-align: center;
+  width: 100%;
+  font-size: 2rem !important;
+  padding-bottom: 0.5rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: -3rem;
+  border-top: 1px solid #e5e7eb;
+  width: 100vw;  /* 전체 너비로 확장 */
+  margin-left: -1.25rem;  /* px-5 보정 */
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+  justify-content: center;
+  margin-bottom: 2em;
+  margin-top: 0.5em;
+  position: relative;
+}
+
+.fc .fc-daygrid-day-frame {
+  min-height: 30px !important;
+  padding: 1px !important;
+}
+
+.fc .fc-daygrid-day-number {
+  padding: 2px !important;
+  font-size: 0.9rem;
+}
+
+.fc-toolbar-chunk {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.fc-view-harness {
+  padding: 0 !important;
+}
+
+.fc-scrollgrid-sync-table {
+  margin: 0 !important;
+}
+
+.fc .fc-daygrid-body-balanced {
+  width: 100% !important;
+}
+
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+  min-height: 0 !important;
+  position: relative !important;
+}
+
+.fc .fc-daygrid-day-top {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
+.fc .fc-daygrid-day-events {
+  margin-top: 1px !important;
+  margin-bottom: 1px !important;
+}
+
+.fc .fc-scrollgrid {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
