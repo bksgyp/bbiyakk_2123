@@ -74,7 +74,6 @@ export default function App() {
               </td>
               <td className="text-2xl font-bold relative top-3" colSpan="2">
                 <p>{session?.user?.username}</p>
-                <p className="text-xs text-gray-400 font-normal mb-2">{session?.user?.major}</p>
               </td>
             </tr>
             <tr>
@@ -88,7 +87,7 @@ export default function App() {
               <td>
                 <div className="grid grid-cols-2 pl-3">
                   <Button className="text-medium px-3 w-[90px]" color="default" variant="flat" size="sm" >
-                    학과 설정
+                    소모임 설정
                   </Button>
                 </div>
               </td>
@@ -96,16 +95,6 @@ export default function App() {
           </tbody>
         </table>
         <div className="pr-8">
-          <div className="mt-4 pb-5 border-b">
-            <div className="text-xs text-gray-400 pb-5">화면 모드</div>
-            <Switch 
-              isSelected={isBlindMode}
-              onValueChange={handleModeChange}
-              aria-label="Color blind mode toggle"
-            >
-              색각이상자 모드
-            </Switch>
-          </div>
           <div className="mt-4 pb-5 border-b">
             <div className="text-xs text-gray-400 pb-5">로그인 정보</div>
             <div className="pb-3" onClick={()=>{
@@ -118,11 +107,11 @@ export default function App() {
             <div className="pb-3">웹사이트</div>
             <div className="flex justify-between w-full">
               <p>버전 정보</p>
-              <p className="text-gray-400">1.17.0</p>
+              <p className="text-gray-400">1.19.8</p>
             </div>
           </div>
           <div className="flex w-full text-xs text-gray-400 justify-center items-center pt-2">
-            copyright 2024. All rights reserved.
+            copyright 2025. All rights reserved.
           </div>
         </div>
       </div>
