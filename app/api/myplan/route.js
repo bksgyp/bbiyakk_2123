@@ -56,10 +56,10 @@ export async function GET(request) {
       };
     });
 
-    console.log("processedPlan", processedPlan);
+    //console.log("processedPlan", processedPlan);
     return NextResponse.json({ success: true, processedPlan });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return NextResponse.json({ error: 'Failed to fetch myplan' }, { status: 500 });
     
   }
@@ -72,7 +72,7 @@ export async function POST(request) {
   }
 
   const notice = await request.json();
-  console.log("123", notice);
+  //console.log("123", notice);
 
   try {
     const createdPlan = await prisma.userplan.create({
@@ -91,7 +91,7 @@ export async function POST(request) {
 
     return NextResponse.json({ success: true, createdPlan });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return NextResponse.json({ error: 'Failed to update myplan' }, { status: 500 });
   }
 }
@@ -103,7 +103,7 @@ export async function DELETE(request) {
   }
 
   const notice = await request.json();
-  console.log("123", notice);
+  //console.log("123", notice);
 
   try {
     const deletedPlan = await prisma.userplan.deleteMany({
@@ -115,7 +115,7 @@ export async function DELETE(request) {
 
     return NextResponse.json({ success: true, deletedPlan });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return NextResponse.json({ error: 'Failed to delete myplan' }, { status: 500 });
   }
 }

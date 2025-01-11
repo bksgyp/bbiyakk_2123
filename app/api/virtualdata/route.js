@@ -51,7 +51,7 @@ export async function GET(request) {
 
     return NextResponse.json({ success: true, virtualData });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return NextResponse.json({ error: 'Failed to fetch virtual data' }, { status: 500 });
   }
 }

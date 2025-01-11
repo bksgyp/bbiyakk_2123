@@ -19,7 +19,7 @@ export default function LoginPage() {
     } else if (session.user && session.user.major) {
       router.push('/');
     }
-    console.log(session);
+    //console.log(session);
   }, [session]);
 
   const renderView = () => {

@@ -25,7 +25,7 @@ export default function Checklist({ toggleChecklist, setIsCategoryVisible, showT
         const data = await response.json();
         setMajorNotices(data.notices || []);
       } catch (error) {
-        console.error('Error fetching notices:', error);
+        //console.error('Error fetching notices:', error);
         setMajorNotices([]);
       }
     };
@@ -41,7 +41,7 @@ export default function Checklist({ toggleChecklist, setIsCategoryVisible, showT
         const data = await response.json();
         setMyPlan(data.myplan || []);
       } catch (error) {
-        console.error('Error fetching myplan:', error);
+        //console.error('Error fetching myplan:', error);
         setMyPlan([]);
       }
     };
@@ -51,13 +51,13 @@ export default function Checklist({ toggleChecklist, setIsCategoryVisible, showT
   }, [showTitle]);
 
   const handleCheckboxChange = async (notice) => {
-    console.log(notice);
+    //console.log(notice);
     const isChecked = myPlan.some(plan => plan.title === notice.title);
     const updatedPlan = isChecked
       ? myPlan.filter(plan => plan.title !== notice.title)
       : [...myPlan, notice];
 
-    console.log(updatedPlan);
+    //console.log(updatedPlan);
 
     setMyPlan(updatedPlan);
 
@@ -86,7 +86,7 @@ export default function Checklist({ toggleChecklist, setIsCategoryVisible, showT
         if (diffDays > 7) {
           newEvent.start = new Date(endDateObj.setDate(endDateObj.getDate() - 7)).toISOString().split('T')[0];
           newEvent.title = newEvent.title + "　";
-          console.log("newEvent", newEvent);
+          //console.log("newEvent", newEvent);
         }
 
         const updatedEvents = isChecked
@@ -96,7 +96,7 @@ export default function Checklist({ toggleChecklist, setIsCategoryVisible, showT
       });
 
     } catch (error) {
-      console.error('Error updating myplan:', error);
+      //console.error('Error updating myplan:', error);
     }
   };
 

@@ -15,7 +15,7 @@ export default function App() {
 
   useEffect(() => {
     if (status === "authenticated" && session?.user) {
-      console.log("Session updated - Current mode:", session.user.mode);
+      //console.log("Session updated - Current mode:", session.user.mode);
       setIsBlindMode(session.user.mode === 1);
     }
   }, [status, session]);
@@ -23,7 +23,7 @@ export default function App() {
   const handleModeChange = async (newValue) => {
     try {
       const newMode = newValue ? 1 : 0;
-      console.log("Attempting to change mode to:", newMode);
+      //console.log("Attempting to change mode to:", newMode);
 
       const response = await fetch('/api/colorset', {
         method: 'POST',
@@ -40,18 +40,18 @@ export default function App() {
       }
 
       const data = await response.json();
-      console.log("API Response:", data);
+      //console.log("API Response:", data);
 
       const result = await update({
         mode: newMode
       });
       
-      console.log("Session update result:", result);
+      //console.log("Session update result:", result);
 
       setIsBlindMode(newMode === 1);
 
     } catch (error) {
-      console.error("Mode update failed:", error);
+      //console.error("Mode update failed:", error);
       setIsBlindMode(session?.user?.mode === 1);
     }
   };

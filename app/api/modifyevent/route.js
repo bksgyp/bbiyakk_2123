@@ -9,7 +9,7 @@ export async function POST(request) {
   }
 
   const eventData = await request.json();
-  console.log("Received event data:", eventData);
+  //console.log("Received event data:", eventData);
 
   try {
     const updatedPlan = await prisma.userplan.updateMany({
@@ -29,7 +29,7 @@ export async function POST(request) {
 
     return NextResponse.json({ success: true, updatedPlan });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return NextResponse.json({ error: 'Failed to update event in userplan' }, { status: 500 });
   }
 }

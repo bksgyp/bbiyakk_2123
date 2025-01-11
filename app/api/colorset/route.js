@@ -22,7 +22,7 @@ export async function POST(request) {
 
         return NextResponse.json({ success: true, user });
     } catch (error) {
-        console.error('Error updating mode:', error);
+        //console.error('Error updating mode:', error);
         return NextResponse.json({ error: 'Failed to update user' }, { status: 500 });
     }
 }

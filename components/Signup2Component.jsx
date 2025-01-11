@@ -135,7 +135,7 @@ export default function Signup2Component({ setViewPage }) {
             })
               .then(response => response.json())
               .then(data => {
-                console.log('Success:', data, session);
+                //console.log('Success:', data, session);
                 update({
                   ...session,
                   user: {
@@ -147,7 +147,7 @@ export default function Signup2Component({ setViewPage }) {
                 router.push('/');
               })
               .catch((error) => {
-                console.error('Error:', error);
+                //console.error('Error:', error);
               });
           }}
           className={`w-[320px] text-white ${

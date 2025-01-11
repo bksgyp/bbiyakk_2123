@@ -19,10 +19,11 @@ export default function Home() {
   const router = useRouter();
   const { data: session } = useSession();
   const [events, setEvents] = useState([]);
+  const [virtualdata, setVirtualdata] = useState([]);
   const { globalPledge } = usePledge();
 
   useEffect(() => {
-    console.log("Session data:", session);
+    //console.log("Session data:", session);
     if(session == null){
       router.push('/login');
     }
@@ -114,7 +115,7 @@ export default function Home() {
           )}
         </div>
       </div>
-      <FullCalendar setEvents={setEvents} events={events}/>
+      <FullCalendar setEvents={setEvents} events={events} virtualdata={virtualdata} setVirtualdata={setVirtualdata}/>
 
       {/* <div className="flex justify-center">
         <FullCalendar setEvents={setEvents} events={events}/>

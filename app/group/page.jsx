@@ -21,10 +21,12 @@ export default function GroupPage() {
     const router = useRouter();
     const { data: session } = useSession();
     const [events, setEvents] = useState([]);
+    const [virtualdata, setVirtualdata] = useState([]);
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [selectedDays, setSelectedDays] = useState([]);
     const { globalPledge, setGlobalPledge } = usePledge();
     const [pledge, setPledge] = useState(globalPledge);
+    const [progress, setProgress] = React.useState(75); // 원하는 진행률 값 (0-100)
 
     const days = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -37,7 +39,7 @@ export default function GroupPage() {
     };
 
     useEffect(() => {
-        console.log("Session data:", session);
+        //console.log("Session data:", session);
         if(session == null){
         router.push('/login');
         }
@@ -66,7 +68,36 @@ export default function GroupPage() {
         }
     };
 
-    const [progress] = React.useState(75); // 원하는 진행률 값 (0-100)
+    useEffect(()=>{
+        //console.log("events:2", events);
+        //console.log("virtualdata:2", virtualdata);
+    const calculateProgress = () => {
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+
+        // 이번달 virtualdata 개수 계산
+        const thisMonthVirtualData = virtualdata.filter(data => {
+            const dataDate = new Date(data.start);
+            return dataDate.getMonth() === currentMonth && dataDate.getFullYear() === currentYear;
+        }).length;
+
+        // 이번달 events 개수 계산 
+        const thisMonthEvents = events.filter(event => {
+            const eventDate = new Date(event.start);
+            return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
+        }).length;
+
+        // 진행률 계산 (events / virtualdata * 100)
+        const calculatedProgress = thisMonthVirtualData === 0 ? 0 : Math.round((thisMonthEvents / thisMonthVirtualData) * 100);
+        
+        setProgress(calculatedProgress);
+    };
+
+    calculateProgress();
+    }, [virtualdata, events]);
+
+
 
     const handleReset = (onClose) => {
         if (pledge.trim()) {  // 입력값이 있을 때만 저장
@@ -104,7 +135,7 @@ export default function GroupPage() {
             />
 
             <div className="flex flex-col">
-                <div className="flex items-center gap-20">
+                <div className="flex items-center gap-16">
                     <span className="text-2xl font-semibold">
                         {session?.user?.name || "게스트"}
                     </span>
@@ -160,7 +191,7 @@ export default function GroupPage() {
             )}
             </div>
         </div>
-        <FullCalendar setEvents={setEvents} events={events}/>
+        <FullCalendar setEvents={setEvents} events={events} virtualdata={virtualdata} setVirtualdata={setVirtualdata}/>
 
         {/* <div className="flex justify-center">
             <FullCalendar setEvents={setEvents} events={events}/>

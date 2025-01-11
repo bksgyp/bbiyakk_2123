@@ -69,19 +69,20 @@ model completeplan {
 }
 
 model myplan {
-  id       Int       @unique(map: "id2") @default(autoincrement())
-  userid   Int?      @default(0)
-  planid   Int?
-  icon     String?   @db.TinyText
-  mon      Int?      @default(0) @db.TinyInt
-  tue      Int?      @default(0) @db.TinyInt
-  wed      Int?      @default(0) @db.TinyInt
-  thr      Int?      @default(0) @db.TinyInt
-  fri      Int?      @default(0) @db.TinyInt
-  sat      Int?      @default(0) @db.TinyInt
-  sun      Int?      @default(0) @db.TinyInt
-  planlist planlist? @relation(fields: [planid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_myplan_planlist")
-  user     user?     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_myplan_user")
+  id         Int       @unique(map: "id2") @default(autoincrement())
+  userid     Int?
+  planid     Int?
+  icon       String?   @db.TinyText
+  mon        Int?      @default(0) @db.TinyInt
+  tue        Int?      @default(0) @db.TinyInt
+  wed        Int?      @default(0) @db.TinyInt
+  thr        Int?      @default(0) @db.TinyInt
+  fri        Int?      @default(0) @db.TinyInt
+  sat        Int?      @default(0) @db.TinyInt
+  sun        Int?      @default(0) @db.TinyInt
+  commitment String?   @db.Text
+  planlist   planlist? @relation(fields: [planid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_myplan_planlist")
+  user       user?     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_myplan_user")
 
   @@index([planid], map: "FK_myplan_planlist")
   @@index([userid], map: "FK_myplan_user")

@@ -37,7 +37,7 @@ const authOptions = {
         },
       });
 
-      console.log("조회함");
+      //console.log("조회함");
 
       // 사용자가 없으면 데이터베이스에 추가
       if (!existingUser) {
@@ -62,7 +62,7 @@ const authOptions = {
       }
     },
     async jwt({ token, user, trigger, session }) {
-        console.log("chk",token,user)
+        //console.log("chk",token,user)
       // 로그인 시 사용자 정보를 토큰에 추가
       if (user) {
         // 데이터베이스에서 사용자 정보 조회
@@ -84,7 +84,7 @@ const authOptions = {
           // 데이터베이스에 있는 다른 필드들도 추가
         }
       }
-      console.log("trigger",trigger)
+      //console.log("trigger",trigger)
       if(trigger === "update" && session?.user?.major){
         token.major = session.user.major;
         token.college = session.user.college;
@@ -92,12 +92,12 @@ const authOptions = {
       }
       if(trigger === "update" && session?.mode !== undefined) {
         token.mode = session.mode;
-        console.log("JWT updated with new mode:", token.mode);
+        //console.log("JWT updated with new mode:", token.mode);
       }
       return token;
     },
     async session({ session, token }) {
-      console.log("session",session,token);
+      //console.log("session",session,token);
       // 세션에 토큰 정보를 추가
       session.user.id = token.id;
       session.user.providerId = token.providerId;

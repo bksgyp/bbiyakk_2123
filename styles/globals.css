@@ -170,3 +170,27 @@ input, textarea {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+.custom-number{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  font-size: 16px;
+  color: black;
+
+}
+
+.custom-number2{
+  
+  position: absolute;
+  margin-top: 50px;
+  color: black;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+}

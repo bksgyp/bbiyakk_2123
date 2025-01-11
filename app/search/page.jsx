@@ -16,7 +16,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import { Chip } from "@nextui-org/chip";
+import { useRouter } from 'next/navigation';
 
 export const SearchIcon = (props) => {
   return (
@@ -49,6 +49,7 @@ export const SearchIcon = (props) => {
 };
 
 export default function App() {
+  const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [firstDropdownKeys, setFirstDropdownKeys] = React.useState(
     new Set(["해시태그"])
@@ -79,7 +80,11 @@ export default function App() {
 
   const [selectedCard, setSelectedCard] = React.useState(null);
   const [commitment, setCommitment] = React.useState("");
+  const [maxcount, setMaxcount] = React.useState(0);
   const [selectedDays, setSelectedDays] = React.useState([]);
+  const [grouptitle, setGrouptitle] = React.useState("");
+  const [emoji, setEmoji] = React.useState("");
+
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
@@ -92,23 +97,46 @@ export default function App() {
     );
   };
 
-  const cardData = [
-    {
-      title: "북북독서왕",
-      description: "저희는 매주 도서관에서 만나요.",
-      hashtags: "#독서 #책",
-    },
-    {
-      title: "러닝러닝",
-      description: "한강, 공원 달리기 인증샷 업로드 필수",
-      hashtags: "#운동 #달리기",
-    },
-    {
-      title: "매일크로키",
-      description: "저희는 매주 그림그려요.",
-      hashtags: "#그림 #크로키",
-    },
-  ];
+  const [cardData, setCardData] = React.useState([]);
+  
+  React.useEffect(()=>{
+    const fetchData = async () => {
+      const response = await fetch("/api/group/search", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      //console.log("search",data);
+      const list = data.map((item) => ({
+        id: item.id,
+        title: item.title,
+        description: item.content,
+        hashtags: item.hashtag1 + " " + item.hashtag2,
+        maxcount: item.maxcount,
+        count: item.count,
+      }));
+      setCardData(list);
+    }
+    fetchData();
+  },[])
+  //   {
+  //     title: "북북독서왕",
+  //     description: "저희는 매주 도서관에서 만나요.",
+  //     hashtags: "#독서 #책",
+  //   },
+  //   {
+  //     title: "러닝러닝",
+  //     description: "한강, 공원 달리기 인증샷 업로드 필수",
+  //     hashtags: "#운동 #달리기",
+  //   },
+  //   {
+  //     title: "매일크로키",
+  //     description: "저희는 매주 그림그려요.",
+  //     hashtags: "#그림 #크로키",
+  //   },
+  // ];
 
   const days = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -153,7 +181,12 @@ export default function App() {
               >
                 <CardBody className="flex gap-3">
                   <div>
-                    <p className="text-md font-bold">{card.title}</p>
+                    <div className="flex justify-between">
+                      <p className="text-md font-bold">{card.title}</p>
+                      <p className="text-small text-default-500">
+                        {card.count} / {card.maxcount}
+                      </p>
+                    </div>
                     <p className="text-small text-default-500">
                       {card.hashtags}
                     </p>
@@ -189,6 +222,8 @@ export default function App() {
                       <input
                         placeholder="입력해주세요."
                         className="ml-3 pl-2 pb-2 mb-1 w-72 pt-2"
+                        value = {commitment}
+                        onChange={(e) => setCommitment(e.target.value)}
                       ></input>
                     </form>
                   </fieldset>
@@ -216,7 +251,10 @@ export default function App() {
                   <fieldset className="border-gray-400 border-1">
                     <legend className="font-bold"> 이모지</legend>
                     <form>
-                      <input className="ml-3 pl-2 pb-2 mb-1 w-72 pt-2"></input>
+                      <input className="ml-3 pl-2 pb-2 mb-1 w-72 pt-2"
+                      value = {emoji}
+                      onChange={(e) => setEmoji(e.target.value)}
+                      ></input>
                     </form>
                   </fieldset>
                 </ModalBody>
@@ -224,7 +262,27 @@ export default function App() {
                   <Button
                     className="rounded-xl w-full"
                     color="primary"
-                    onPress={onClose}
+                    onPress={()=>{
+                      const fetchData = async () => {
+                        const response = await fetch("/api/group/join", {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            commitment: commitment,
+                            emoji: emoji,
+                            days: selectedDays,
+                            planid: selectedCard.id,
+                          }),
+                        });
+                        if (response.status === 200) {
+                          router.push('/group');
+                        }
+                      }
+                      fetchData();
+                      onClose();
+                    }}
                   >
                     소모임 참여하기
                   </Button>
@@ -267,6 +325,8 @@ export default function App() {
                       <input
                         placeholder="입력해주세요."
                         className="ml-3 pl-2 pb-2 mb-1 w-72 pt-2"
+                        value = {grouptitle}
+                        onChange={(e) => setGrouptitle(e.target.value)}
                       ></input>
                     </form>
                   </fieldset>
@@ -279,6 +339,8 @@ export default function App() {
                       <input
                         placeholder="제한하고 싶은 인원을 설정해주세요."
                         className="ml-3 pl-2 pb-2 mb-1 w-72 pt-2"
+                        value = {maxcount}
+                        onChange={(e) => setMaxcount(e.target.value)}
                       ></input>
                     </form>
                   </fieldset>
@@ -301,23 +363,23 @@ export default function App() {
                             variant="flat"
                             onSelectionChange={setFirstDropdownKeys}
                           >
-                            <DropdownItem key="exercise">운동</DropdownItem>
-                            <DropdownItem key="reading">독서</DropdownItem>
-                            <DropdownItem key="art">그림</DropdownItem>
-                            <DropdownItem key="conversation">회화</DropdownItem>
-                            <DropdownItem key="coding">코딩</DropdownItem>
-                            <DropdownItem key="liberal_arts">교양</DropdownItem>
-                            <DropdownItem key="tool">툴</DropdownItem>
-                            <DropdownItem key="music">음악</DropdownItem>
-                            <DropdownItem key="finance">재테크</DropdownItem>
-                            <DropdownItem key="cooking">요리</DropdownItem>
-                            <DropdownItem key="book">책</DropdownItem>
-                            <DropdownItem key="running">달리기</DropdownItem>
-                            <DropdownItem key="watercolor">수채화</DropdownItem>
-                            <DropdownItem key="drawing">소묘</DropdownItem>
-                            <DropdownItem key="language">언어</DropdownItem>
-                            <DropdownItem key="performance">공연</DropdownItem>
-                            <DropdownItem key="exhibition">전시</DropdownItem>
+                            <DropdownItem key="운동">운동</DropdownItem>
+                            <DropdownItem key="독서">독서</DropdownItem>
+                            <DropdownItem key="그림">그림</DropdownItem>
+                            <DropdownItem key="회화">회화</DropdownItem>
+                            <DropdownItem key="코딩">코딩</DropdownItem>
+                            <DropdownItem key="교양">교양</DropdownItem>
+                            <DropdownItem key="툴">툴</DropdownItem>
+                            <DropdownItem key="음악">음악</DropdownItem>
+                            <DropdownItem key="재테크">재테크</DropdownItem>
+                            <DropdownItem key="요리">요리</DropdownItem>
+                            <DropdownItem key="책">책</DropdownItem>
+                            <DropdownItem key="달리기">달리기</DropdownItem>
+                            <DropdownItem key="수채화">수채화</DropdownItem>
+                            <DropdownItem key="소묘">소묘</DropdownItem>
+                            <DropdownItem key="언어">언어</DropdownItem>
+                            <DropdownItem key="공연">공연</DropdownItem>
+                            <DropdownItem key="전시">전시</DropdownItem>
                           </DropdownMenu>
                         </Dropdown>
                       </div>
@@ -339,44 +401,29 @@ export default function App() {
                             variant="flat"
                             onSelectionChange={setSecondDropdownKeys}
                           >
-                            <DropdownItem key="exercise">운동</DropdownItem>
-                            <DropdownItem key="reading">독서</DropdownItem>
-                            <DropdownItem key="art">그림</DropdownItem>
-                            <DropdownItem key="conversation">회화</DropdownItem>
-                            <DropdownItem key="coding">코딩</DropdownItem>
-                            <DropdownItem key="liberal_arts">교양</DropdownItem>
-                            <DropdownItem key="tool">툴</DropdownItem>
-                            <DropdownItem key="music">음악</DropdownItem>
-                            <DropdownItem key="finance">재테크</DropdownItem>
-                            <DropdownItem key="cooking">요리</DropdownItem>
-                            <DropdownItem key="book">책</DropdownItem>
-                            <DropdownItem key="running">달리기</DropdownItem>
-                            <DropdownItem key="watercolor">수채화</DropdownItem>
-                            <DropdownItem key="drawing">소묘</DropdownItem>
-                            <DropdownItem key="language">언어</DropdownItem>
-                            <DropdownItem key="performance">공연</DropdownItem>
-                            <DropdownItem key="exhibition">전시</DropdownItem>
+                            <DropdownItem key="운동">운동</DropdownItem>
+                            <DropdownItem key="독서">독서</DropdownItem>
+                            <DropdownItem key="그림">그림</DropdownItem>
+                            <DropdownItem key="회화">회화</DropdownItem>
+                            <DropdownItem key="코딩">코딩</DropdownItem>
+                            <DropdownItem key="교양">교양</DropdownItem>
+                            <DropdownItem key="툴">툴</DropdownItem>
+                            <DropdownItem key="음악">음악</DropdownItem>
+                            <DropdownItem key="재테크">재테크</DropdownItem>
+                            <DropdownItem key="요리">요리</DropdownItem>
+                            <DropdownItem key="책">책</DropdownItem>
+                            <DropdownItem key="달리기">달리기</DropdownItem>
+                            <DropdownItem key="수채화">수채화</DropdownItem>
+                            <DropdownItem key="소묘">소묘</DropdownItem>
+                            <DropdownItem key="언어">언어</DropdownItem>
+                            <DropdownItem key="공연">공연</DropdownItem>
+                            <DropdownItem key="전시">전시</DropdownItem>
                           </DropdownMenu>
                         </Dropdown>
                       </div>
                     </div>
                     <div>
-                    <p className="font-bold mb-3">참여요일</p>
-                    <div className="flex justify-between gap-2">
-                      {days.map((day) => (
-                        <Button
-                          key={day}
-                          className={`rounded-full w-10 h-10 min-w-0 ${
-                            selectedDays.includes(day)
-                              ? "bg-blue-500 text-white"
-                              : "bg-white text-gray-400"
-                          }`}
-                          onPress={() => toggleDay(day)}
-                        >
-                          {day}
-                        </Button>
-                      ))}
-                    </div>
+                    
                   </div>
                     <div className="text-sm">
                       <p>* 기존 소모임과 동일한 이름을 사용할 수 없습니다.</p>
@@ -387,7 +434,30 @@ export default function App() {
                   </div>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" onPress={onClose}>
+                  <Button color="primary" onPress={()=>{
+                    const fetchData = async () => {
+                      const response = await fetch("/api/group/create", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          title: grouptitle,
+                          content: "",
+                          hashtag1: Array.from(firstDropdownKeys)[0],
+                          hashtag2: Array.from(secondDropdownKeys)[0],
+                          count: 0,
+                          maxcount: maxcount,
+                        })
+                      });
+                      if (response.status === 200) {
+                        router.push('/group');
+                      }
+                    };
+                    fetchData();
+                    onClose();
+                  }}
+                  >
                     소모임 만들기
                   </Button>
                 </ModalFooter>

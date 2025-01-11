@@ -9,7 +9,7 @@ export async function POST(request) {
   }
 
   const eventData = await request.json();
-  console.log("Received event data:", eventData);
+  //console.log("Received event data:", eventData);
 
   try {
     const createdPlan = await prisma.userplan.create({
@@ -24,7 +24,7 @@ export async function POST(request) {
 
     return NextResponse.json({ success: true, createdPlan });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return NextResponse.json({ error: 'Failed to add event to userplan' }, { status: 500 });
   }
 }

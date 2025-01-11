@@ -14,7 +14,7 @@ import { Textarea } from "@nextui-org/input";
 import { useSession } from 'next-auth/react';
 import { Checkbox } from "@nextui-org/checkbox";
 
-export default function FullCalendar({setEvents, events}) {
+export default function FullCalendar({setEvents, events, virtualdata, setVirtualdata}) {
   const { data: session } = useSession();
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const calendarRef = useRef(null);
@@ -29,7 +29,9 @@ export default function FullCalendar({setEvents, events}) {
   const [description, setDescription] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [dateError, setDateError] = useState(false);
-  const [virtualdata, setVirtualdata] = useState([]);
+  const [fullplan, setFullplan] = useState([]);
+  const [virtualfullplan, setVirtualfullplan] = useState([]);
+  //const [virtualdata, setVirtualdata] = useState([]);
   const [colormatch, setColormatch] = useState([
     { id: 'a', title: 'Auditorium A', eventColor: '#ffffff' },
     { id: 'b', title: 'Auditorium B', eventColor: '#ffffff' },
@@ -39,10 +41,37 @@ export default function FullCalendar({setEvents, events}) {
   ]);
   const assignedTitles = [];
 
+  useEffect(()=>{
+    const fetchFullplan = async () => {
+      const response = await fetch('/api/fullplan', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      setFullplan(data.fullplan); 
+    }
+
+    const fetchVirtualFullplan = async () => {
+      const response = await fetch('/api/virtualfullplan', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      setVirtualfullplan(data.virtualfullplan);
+    }
+
+    fetchFullplan();
+    fetchVirtualFullplan();
+  }, []);
+
 
   useEffect(() => {
     if (session && session.user) {
-      console.log("session", session);
+      //console.log("session", session);
       if (session.user.mode === 1) {
         setColormatch([
           { id: 'a', title: 'Auditorium A', eventColor: '#ffffff' },
@@ -54,6 +83,7 @@ export default function FullCalendar({setEvents, events}) {
       }
     }
   }, [session]);
+
 
 
   useEffect(() => {
@@ -100,7 +130,7 @@ export default function FullCalendar({setEvents, events}) {
         
         setEvents(processedEvents || []);
       } catch (error) {
-        console.error('Error fetching events:', error);
+        //console.error('Error fetching events:', error);
         setEvents([]);
       }
     };
@@ -130,7 +160,7 @@ export default function FullCalendar({setEvents, events}) {
         
         return event;
       });
-      console.log("virtualdata", data.virtualData);
+      //console.log("virtualdata", data.virtualData);
       const processedVirtualEvents = data.virtualData.map(event => ({
         ...event,
         start: new Date(event.date).toISOString().split('T')[0], 
@@ -147,7 +177,7 @@ export default function FullCalendar({setEvents, events}) {
         );
         return [...prev, ...uniqueEvents];
       });
-      console.log("virtualdata", virtualdata);
+      //console.log("virtualdata", virtualdata);
       
     };
 
@@ -175,7 +205,7 @@ export default function FullCalendar({setEvents, events}) {
   };
 
   const handleDatesSet = (arg) => {
-    //console.log(arg);
+    ////console.log(arg);
     const startDate = new Date(arg.start).getMonth()+1;
     let endDate = new Date(arg.end).getMonth()+1;
     if(startDate > endDate){
@@ -193,7 +223,7 @@ export default function FullCalendar({setEvents, events}) {
     }
     
     setCurrentMonth(newMonth);
-    //console.log(endDate, startDate, newMonth);
+    ////console.log(endDate, startDate, newMonth);
 
   };
 
@@ -202,9 +232,9 @@ export default function FullCalendar({setEvents, events}) {
   };
 
   const handleEventDrop = (info) => {
-    console.log("info", info);
-    console.log("이름", info.event._def.title)
-    console.log("변경된 날짜:", info.event._instance.range.start);
+    //console.log("info", info);
+    //console.log("이름", info.event._def.title)
+    //console.log("변경된 날짜:", info.event._instance.range.start);
     const modifyEvent = async () => {
       try {
         const response = await fetch('/api/modifyevent', {
@@ -235,7 +265,7 @@ export default function FullCalendar({setEvents, events}) {
           return updatedEvents;
         });
       } catch (error) {
-        console.error('Error fetching events:', error);
+        //console.error('Error fetching events:', error);
       }
     };
 
@@ -246,46 +276,46 @@ const handleEventDragStop = (info) => {
   setTimeout(() => {
     const daydivs = document.getElementsByClassName("fc-daygrid-day-frame");
     const plandivs = document.getElementsByClassName("fc-daygrid-event-harness");
-    //console.log("daydivs", daydivs);
-    //console.log("plandivs", plandivs);
+    ////console.log("daydivs", daydivs);
+    ////console.log("plandivs", plandivs);
 
     const firstDayDiv = daydivs[0];
 
     for (let i = 0; i < plandivs.length; i++) {
-      //console.log("plandivs[i]", plandivs[i]);
+      ////console.log("plandivs[i]", plandivs[i]);
       plandivs[i].addEventListener('click', (event) => {
         const divStartX = plandivs[i].getBoundingClientRect().left;
         const clickX = event.clientX;
         const diffX = clickX - divStartX;
         
         const anchorTag = plandivs[i].querySelector('a');
-        //console.log("anchorTag", anchorTag);
+        ////console.log("anchorTag", anchorTag);
         let previousSiblingDiv = plandivs[i].parentElement.previousElementSibling;
         while (previousSiblingDiv && !previousSiblingDiv.querySelector('a')) {
           previousSiblingDiv = previousSiblingDiv.previousElementSibling;
         }
         const previousAnchorTag = previousSiblingDiv ? previousSiblingDiv.querySelector('a') : null;
-        //console.log("previousAnchorTag", previousAnchorTag);
+        ////console.log("previousAnchorTag", previousAnchorTag);
         const ariaLabel = previousAnchorTag ? previousAnchorTag.getAttribute('aria-label') : anchorTag.getAttribute('aria-label');
-        //console.log("ariaLabel", ariaLabel);
+        ////console.log("ariaLabel", ariaLabel);
         const [year, month, day] = ariaLabel.match(/(\d+)년 (\d+)월 (\d+)일/).slice(1, 4);
-        //console.log("year, month, day", year, month, day);
+        ////console.log("year, month, day", year, month, day);
         const baseDate = new Date(year, month - 1, day);
-        //console.log("baseDate", baseDate);
+        ////console.log("baseDate", baseDate);
 
         const dayDivStartX = daydivs[0].getBoundingClientRect().left;
         const dayWidth = daydivs[0].getBoundingClientRect().width;
-        //console.log("dayWidth", dayWidth);
+        ////console.log("dayWidth", dayWidth);
 
         const test = Math.floor(diffX / dayWidth);
-        //console.log("test", test);
+        ////console.log("test", test);
 
-        //console.log("div 시작점:", divStartX);
-        //console.log("클릭된 x좌표:", clickX);
-        //console.log("차이값:", diffX);
+        ////console.log("div 시작점:", divStartX);
+        ////console.log("클릭된 x좌표:", clickX);
+        ////console.log("차이값:", diffX);
         const newDate = new Date(baseDate);
         newDate.setDate(newDate.getDate() + test);
-        //console.log("새로운 날짜:", newDate);
+        ////console.log("새로운 날짜:", newDate);
         setSelectedDate(newDate);
         onOpen();
       });
@@ -294,7 +324,7 @@ const handleEventDragStop = (info) => {
 };
 
   const handleEventResize = (info) => {
-    console.log("info", info);
+    //console.log("info", info);
   };
 
   const eventstest = [
@@ -354,14 +384,14 @@ const handleEventDragStop = (info) => {
             if (diffDays > 7) {
               newEvent.start = new Date(endDateObj.setDate(endDateObj.getDate() - 7)).toISOString().split('T')[0];
               newEvent.title = newEvent.title + "　";
-              console.log("newEvent", newEvent);
+              //console.log("newEvent", newEvent);
             }
 
             const updatedEvents = [...prevEvents, newEvent];
             return updatedEvents;
           });
         } catch (error) {
-          console.error('Error adding event:', error);
+          //console.error('Error adding event:', error);
         }
       };
 
@@ -437,8 +467,41 @@ const handleEventDragStop = (info) => {
         datesSet={handleDatesSet}
         dayCellDidMount={(info) => {
           setTimeout(() => {
+            if (window.location.pathname === '/group') {
+              let cnt = info.el.getElementsByClassName("fc-daygrid-day-events");
+              let day = info.date.getDate();
+              // day = day + 1;
+              //console.log("testtest", fullplan, virtualfullplan);
+              let plans = fullplan.filter(plan => plan.date == day);
+              let totalcnt = virtualfullplan.filter(plan => new Date(plan.date).getDate() == day).length;
+              let completecnt = plans.length;
+              cnt = cnt[0].getElementsByClassName("fc-daygrid-event-harness");
+              if(cnt.length == 0 && info.date < new Date()){
+                const customNumber = document.createElement('div');
+                customNumber.className = 'custom-number';
+                customNumber.innerText = `${completecnt}/${totalcnt}`; // 원하는 숫자를 입력하세요
+                info.el.getElementsByClassName("fc-daygrid-day-events")[0].appendChild(customNumber);
+              }
+            }
+            
+
+            let cnt22 = info.el.getElementsByClassName("fc-daygrid-day-events");
+            //console.log("cnt22", cnt22);
+            let cnt222 = cnt22[0].getElementsByClassName("fc-daygrid-event-harness");
+            //console.log("cnt222", cnt222);
+            if(cnt222.length >= 2) {
+              //console.log("cnt222.length", cnt222.length);
+              const customNumber2 = document.createElement('div');
+              customNumber2.className = 'custom-number2';
+              customNumber2.innerText = `+${cnt222.length-1}`; // 원하는 숫자를 입력하세요
+              cnt22[0].getElementsByClassName("fc-daygrid-event-harness")[0].appendChild(customNumber2);
+            }
+
+
+
             const daydiv = info.el.getElementsByClassName("fc-daygrid-day-frame")[0];
             const plandivs = info.el.getElementsByClassName("fc-daygrid-event-harness");
+            
 
             // daydiv에 이벤트를 추가하지만, 이벤트가 plandiv에서 발생하면 무시
             daydiv.addEventListener('click', (event) => {
@@ -448,12 +511,12 @@ const handleEventDragStop = (info) => {
               }
             });
 
-            //console.log("daydiv", daydiv);
-            //console.log("plandivs", plandivs);
-            //console.log("이엘", info);
+            ////console.log("daydiv", daydiv);
+            ////console.log("plandivs", plandivs);
+            ////console.log("이엘", info);
 
             for (let i = 0; i < plandivs.length; i++) {
-              //console.log("plandivs[i]", plandivs[i]);
+              ////console.log("plandivs[i]", plandivs[i]);
               plandivs[i].addEventListener('click', (event) => {
                 event.stopPropagation(); // 이벤트 전파 중지
                 const divStartX = plandivs[i].getBoundingClientRect().left;
@@ -462,17 +525,17 @@ const handleEventDragStop = (info) => {
 
                 const dayDivStartX = daydiv.getBoundingClientRect().left;
                 const dayWidth = daydiv.getBoundingClientRect().width;
-                //console.log("dayWidth", dayWidth);
+                ////console.log("dayWidth", dayWidth);
 
                 const test = Math.floor(diffX / dayWidth);
-                //console.log("test", test);
+                ////console.log("test", test);
 
-                //console.log("div 시작점:", divStartX);
-                //console.log("클릭된 x좌표:", clickX);
-                //console.log("차이값:", diffX);
+                ////console.log("div 시작점:", divStartX);
+                ////console.log("클릭된 x좌표:", clickX);
+                ////console.log("차이값:", diffX);
                 const newDate = new Date(info.date);
                 newDate.setDate(newDate.getDate() + test);
-                //console.log("새로운 날짜:", newDate);
+                ////console.log("새로운 날짜:", newDate);
                 setSelectedDate(newDate);
                 onOpen();
               });
@@ -497,7 +560,7 @@ const handleEventDragStop = (info) => {
           };
           if(arg.event._def.title.includes("　") && !assignedTitles.includes(arg.event._def.title)){
             assignedTitles.push(arg.event._def.title);
-            console.log("assignedTitles", arg);
+            //console.log("assignedTitles", arg);
             return [`!bg-white`, `pointer-events-none`, `bg-clip-padding`, `bg-gradient-to-r`, `from-white`, color[arg.backgroundColor][0], `via-20%`, color[arg.backgroundColor][1]];
           }
 
@@ -579,7 +642,7 @@ const handleEventDragStop = (info) => {
                           //eventStartDate.setDate(eventStartDate.getDate() - 1); // startDate를 하루 뺀 날짜로 설정
                           const eventEndDate = new Date(event.end);
                           const selectedDay = new Date(selectedDate);
-                          console.log("haha2",event);
+                          //console.log("haha2",event);
                           selectedDay.setDate(selectedDay.getDate() + 1); // selectedDay에 하루를 더함
                           return (
                             eventStartDate.toISOString().split('T')[0] <= selectedDay.toISOString().split('T')[0] &&

@@ -34,14 +34,14 @@ export async function POST(request) {
   if (category === "학과") {
     try {
       // 한글을 영어로 변환
-      console.log(token);
+      //console.log(token);
       const englishCollege = collegeMapping[token.college] || token.college;
       const notices = await prisma.notice.findMany({
         where: { major: englishCollege, detail: detail },
       });
       return NextResponse.json({ success: true, notices });
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       return NextResponse.json({ error: 'Failed to fetch notice' }, { status: 500 });
     }
   }
