@@ -21,7 +21,7 @@ export default function Footer() {
     }
 
     return (
-        <div className="flex justify-between h-16 w-full bg-white border-t border-gray-200" id="footer">
+        <div className="fixed bottom-0 flex justify-between h-14 w-full max-w-[768px] bg-white border-t border-gray-200" id="footer">
             {buttons.map(button => (
                 <div key={button.id} className='w-14'>
                     <Button
