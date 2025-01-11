@@ -9,12 +9,59 @@ export async function GET(request) {
   }
 
   try {
-    const myplan = await prisma.userplan.findMany({
-      where: { user_id: token.id },
+    // 1. completeplan에서 userid가 일치하는 데이터 찾기
+    const myplan = await prisma.completeplan.findMany({
+      where: { userid: token.id },
     });
-    return NextResponse.json({ success: true, myplan });
+
+    // 2. myplan에서 userid와 planid가 일치하는 데이터 찾기 
+    const myplanlist = await prisma.myplan.findMany({
+      where: {
+        userid: token.id,
+        planid: {
+          in: myplan.map(plan => plan.planid)
+        }
+      }
+    });
+
+    // 3. planlist에서 id가 일치하는 데이터 찾기
+    const planlist = await prisma.planlist.findMany({
+      where: {
+        id: {
+          in: myplanlist.map(plan => plan.planid)
+        }
+      }
+    });
+
+    const processedPlan = myplan.map(plan => {
+      // planid로 매칭되는 myplan과 planlist 데이터 찾기
+      const matchingMyPlan = myplanlist.find(p => p.planid === plan.planid);
+      const matchingPlanlist = planlist.find(p => p.id === plan.planid);
+
+      return {
+        ...plan,
+        startdate: plan.date.toISOString().split('T')[0],
+        enddate: plan.date.toISOString().split('T')[0],
+        title: matchingMyPlan ? matchingMyPlan.icon : '', // myplan의 icon을 title로
+        rtitle: matchingPlanlist ? matchingPlanlist.title : '', // planlist의 title을 rtitle로
+        days: matchingMyPlan ? [
+          matchingMyPlan.mon,
+          matchingMyPlan.tue, 
+          matchingMyPlan.wed,
+          matchingMyPlan.thr,
+          matchingMyPlan.fri,
+          matchingMyPlan.sat,
+          matchingMyPlan.sun
+        ] : []
+      };
+    });
+
+    console.log("processedPlan", processedPlan);
+    return NextResponse.json({ success: true, processedPlan });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ error: 'Failed to fetch myplan' }, { status: 500 });
+    
   }
 }
 

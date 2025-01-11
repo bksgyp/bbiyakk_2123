@@ -12,6 +12,7 @@ import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDis
 import { DatePicker } from "@nextui-org/react";
 import { Textarea } from "@nextui-org/input";
 import { useSession } from 'next-auth/react';
+import { Checkbox } from "@nextui-org/checkbox";
 
 export default function FullCalendar({setEvents, events}) {
   const { data: session } = useSession();
@@ -28,6 +29,7 @@ export default function FullCalendar({setEvents, events}) {
   const [description, setDescription] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [dateError, setDateError] = useState(false);
+  const [virtualdata, setVirtualdata] = useState([]);
   const [colormatch, setColormatch] = useState([
     { id: 'a', title: 'Auditorium A', eventColor: '#ffffff' },
     { id: 'b', title: 'Auditorium B', eventColor: '#ffffff' },
@@ -65,6 +67,7 @@ export default function FullCalendar({setEvents, events}) {
 
 
 
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -75,7 +78,7 @@ export default function FullCalendar({setEvents, events}) {
           },
         });
         const data = await response.json();
-        data.myplan = data.myplan.map(event => {
+        data.processedPlan = data.processedPlan.map(event => {
           const startDate = new Date(event.startdate);
           const endDate = new Date(event.enddate);
           const diffTime = Math.abs(endDate - startDate);
@@ -88,14 +91,13 @@ export default function FullCalendar({setEvents, events}) {
           
           return event;
         });
-        const processedEvents = data.myplan.map(event => ({
+        const processedEvents = data.processedPlan.map(event => ({
           ...event,
           start: new Date(event.startdate).toISOString().split('T')[0],
           end: new Date(event.enddate).toISOString().split('T')[0],
-          resourceId: ['a', 'b', 'c', 'd'][data.myplan.indexOf(event) % 4],
+          resourceId: ['a', 'b', 'c', 'd'][data.processedPlan.indexOf(event) % 4],
         }));
         
-        console.log("events", processedEvents);
         setEvents(processedEvents || []);
       } catch (error) {
         console.error('Error fetching events:', error);
@@ -105,6 +107,52 @@ export default function FullCalendar({setEvents, events}) {
 
     fetchEvents();
   }, []);
+
+  useEffect(()=>{
+    const fetchVirtualEvents = async () => {
+      const response = await fetch('/api/virtualdata', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      data.virtualData = data.virtualData.map(event => {
+        const startDate = new Date(event.date);
+        const endDate = new Date(event.date);
+        const diffTime = Math.abs(endDate - startDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        
+        if (diffDays > 7) {
+          event.date = new Date(endDate.setDate(endDate.getDate() - 7)).toISOString().split('T')[0];
+          event.title = event.title + "　";
+        }
+        
+        return event;
+      });
+      console.log("virtualdata", data.virtualData);
+      const processedVirtualEvents = data.virtualData.map(event => ({
+        ...event,
+        start: new Date(event.date).toISOString().split('T')[0], 
+        end: new Date(event.date).toISOString().split('T')[0],
+        resourceId: ['a', 'b', 'c', 'd'][data.virtualData.indexOf(event) % 4],
+      }));
+      setVirtualdata(prev => {
+        const uniqueEvents = processedVirtualEvents.filter(newEvent => 
+          !prev.some(existingEvent => 
+            existingEvent.start === newEvent.start && 
+            existingEvent.title === newEvent.title &&
+            existingEvent.rtitle === newEvent.rtitle
+          )
+        );
+        return [...prev, ...uniqueEvents];
+      });
+      console.log("virtualdata", virtualdata);
+      
+    };
+
+    fetchVirtualEvents();
+  }, [isOpen]);
 
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
@@ -333,6 +381,8 @@ const handleEventDragStop = (info) => {
     }
   }, [events]);
 
+
+
   return (
     <>
     <div
@@ -521,89 +571,115 @@ const handleEventDragStop = (info) => {
                   </div>
                 ) : (
                   <div className='flex flex-col'>
-                    <p className='text-sm mb-[10px] font-bold text-[#888888]'>학사일정</p>
-                    <Accordion variant="splitted" className='px-0'>
+                    <p className='text-sm mb-[10px] font-bold text-[#888888]'>완료한 소모임</p>
+                    <div className='px-0'>
                       {events
                         .filter(event => {
                           const eventStartDate = new Date(event.start);
                           //eventStartDate.setDate(eventStartDate.getDate() - 1); // startDate를 하루 뺀 날짜로 설정
                           const eventEndDate = new Date(event.end);
                           const selectedDay = new Date(selectedDate);
+                          console.log("haha2",event);
                           selectedDay.setDate(selectedDay.getDate() + 1); // selectedDay에 하루를 더함
                           return (
                             eventStartDate.toISOString().split('T')[0] <= selectedDay.toISOString().split('T')[0] &&
-                            eventEndDate.toISOString().split('T')[0] > selectedDay.toISOString().split('T')[0] &&
-                            event.detail // detail이 있는지 확인
+                            eventEndDate.toISOString().split('T')[0] >= selectedDay.toISOString().split('T')[0]
                           );
                         })
                         .map((event, index) => (
-                          <AccordionItem
-                            classNames={{
-                              title: 'font-bold text-xl',
-                              content: 'font-bold text-base text-[#888888]',
-                            }}
+                          <div
+                            className="flex flex-row border-1 border-black rounded-lg p-2 mb-2"
                             key={index}
-                            aria-label={`Accordion ${index + 1}`}
-                            title={
-                              <>
-                                <div className='flex flex-row'>
-                                  <div className='flex flex-shrink-0 w-1 mr-2' style={{ backgroundColor: colormatch.find(color => color.id === event.resourceId)?.eventColor }}></div>
-                                  <div>{event.title}</div>
-                                </div>
-                              </>
-                            }
                           >
-                            <div className='max-w-[95%]' style={{ wordBreak: 'break-all', overflowWrap: 'break-word' }}>
-                              {event.description}
+                            <div className="flex justify-center items-center text-3xl">
+                              {event.title}
                             </div>
-                          </AccordionItem>
+                            <div className="flex flex-col pl-2 w-full">
+                              <p className="text-2xl font-bold">{event.rtitle}</p>
+                              <p className="text-base text-[#888888]">
+                                {(() => {
+                                  const days = event.days;
+                                  const dayNames = ['월', '화', '수', '목', '금', '토', '일'];
+                                  const selectedDays = days
+                                    .map((day, index) => day === 1 ? dayNames[index] : null)
+                                    .filter(day => day !== null);
+                                  const count = days.reduce((acc, curr) => acc + curr, 0);
+                                  return `주 ${count}회 ${selectedDays.join(',')}`
+                                })()}
+                              </p>
+                            </div>
+                            <div className="flex justify-end items-center">
+                                <Checkbox
+                                  isSelected
+                                  isDisabled
+                                />
+                            </div>
+                          </div>
                         ))}
-                    </Accordion>
+                    </div>
                     <Divider className='my-5'/>
-                    <p className='text-sm mb-[10px] font-bold text-[#888888]'>개인일정</p>
-                    <Accordion variant="splitted" className='px-0'>
-                      {events
+                    <p className='text-sm mb-[10px] font-bold text-[#888888]'>미완료</p>
+                    <div className='px-0'>
+                      {virtualdata
                         .filter(event => {
                           const eventStartDate = new Date(event.start);
+                          eventStartDate.setDate(eventStartDate.getDate() + 1);
                           const eventEndDate = new Date(event.end);
+                          eventEndDate.setDate(eventEndDate.getDate() + 1);
                           const selectedDay = new Date(selectedDate);
-                          selectedDay.setDate(selectedDay.getDate() + 1); // selectedDay에 하루를 더함
-                          console.log(eventStartDate.getDate(), eventEndDate.getDate(), selectedDay.getDate());
-                          console.log(eventStartDate.toISOString().split('T')[0], eventEndDate.toISOString().split('T')[0], selectedDay.toISOString().split('T')[0]);
-                          console.log(eventStartDate.toISOString().split('T')[0] <= selectedDay.toISOString().split('T')[0], eventEndDate.toISOString().split('T')[0] > selectedDay.toISOString().split('T')[0]);
+                          selectedDay.setDate(selectedDay.getDate() + 1);
+
+                          // 해당 날짜에 events에 데이터가 있는지 확인
+                          const hasCompletedEvent = events.some(completedEvent => {
+                            const completedStartDate = new Date(completedEvent.start);
+                            const completedEndDate = new Date(completedEvent.end);
+                            return (
+                              completedStartDate.toISOString().split('T')[0] <= selectedDay.toISOString().split('T')[0] &&
+                              completedEndDate.toISOString().split('T')[0] >= selectedDay.toISOString().split('T')[0] &&
+                              completedEvent.title === event.title &&
+                              completedEvent.rtitle === event.rtitle
+                            );
+                          });
+
                           return (
                             eventStartDate.toISOString().split('T')[0] <= selectedDay.toISOString().split('T')[0] &&
-                            eventEndDate.toISOString().split('T')[0] > selectedDay.toISOString().split('T')[0] &&
-                            !event.detail // detail이 없는지 확인
+                            eventEndDate.toISOString().split('T')[0] >= selectedDay.toISOString().split('T')[0] &&
+                            !hasCompletedEvent
                           );
                         })
                         .map((event, index) => (
-                          <AccordionItem
-                            classNames={{
-                              title: 'font-bold text-xl',
-                              content: 'font-bold text-base text-[#888888]',
-                            }}
+                          <div
+                            className="flex flex-row border-1 border-black rounded-lg p-2 mb-2"
                             key={index}
-                            aria-label={`Accordion ${index + 1}`}
-                            title={
-                              <>
-                                <div className='flex flex-row'>
-                                  <div className='flex flex-shrink-0 w-1 mr-2' style={{ backgroundColor: colormatch.find(color => color.id === event.resourceId)?.eventColor }}></div>
-                                  <div>{event.title}</div>
-                                </div>
-                              </>
-                            }
                           >
-                            <div className='max-w-[95%]' style={{ wordBreak: 'break-all', overflowWrap: 'break-word' }}>
-                              {event.description}
+                            <div className="flex justify-center items-center text-3xl">
+                              {event.title}
                             </div>
-                          </AccordionItem>
+                            <div className="flex flex-col pl-2 w-full">
+                              <p className="text-2xl font-bold">{event.rtitle}</p>
+                              <p className="text-base text-[#888888]">
+                                {(() => {
+                                  const days = event.days;
+                                  const dayNames = ['월', '화', '수', '목', '금', '토', '일'];
+                                  const selectedDays = days
+                                    .map((day, index) => day === 1 ? dayNames[index] : null)
+                                    .filter(day => day !== null);
+                                  const count = days.reduce((acc, curr) => acc + curr, 0);
+                                  return `주 ${count}회 ${selectedDays.join(',')}`
+                                })()}
+                              </p>
+                            </div>
+                            <div className="flex justify-end items-center">
+                                <Checkbox
+                                />
+                            </div>
+                          </div>
                         ))}
-                    </Accordion>
+                    </div>
                   </div>
                 )}
               </ModalBody>
-              <ModalFooter>
+              {/* <ModalFooter>
                 {isAddingEvent ? (
                   <Button 
                     className={`w-full text-white ${
@@ -617,7 +693,7 @@ const handleEventDragStop = (info) => {
                 ) : (
                   <Button onClick={handleAddEventClick} className='w-full text-white bg-blue-600'>일정 추가</Button>
                 )}
-              </ModalFooter>
+              </ModalFooter> */}
             </>
           )}
         </ModalContent>

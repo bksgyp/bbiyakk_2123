@@ -23,14 +23,17 @@ model notice {
 }
 
 model user {
-  id         Int        @unique(map: "id") @default(autoincrement())
-  username   String?    @db.Text
-  providerId String?    @db.Text
-  major      String?    @db.Text
-  college    String?    @db.Text
-  mode       Int?       @db.TinyInt
-  provider   String?    @db.Text
-  userplan   userplan[]
+  id            Int            @unique(map: "id") @default(autoincrement())
+  username      String?        @db.Text
+  provider      String?        @db.Text
+  providerId    String?        @db.Text
+  major         String?        @db.Text
+  college       String?        @db.Text
+  mode          Int            @db.TinyInt
+  determination String?        @db.Text
+  completeplan  completeplan[]
+  myplan        myplan[]
+  userplan      userplan[]
 
   @@index([id], map: "id2")
 }
@@ -49,5 +52,53 @@ model userplan {
   user        user?     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_userplan_user")
 
   @@index([user_id], map: "FK_userplan_user")
+  @@index([id], map: "id2")
+}
+
+model completeplan {
+  id       Int       @unique(map: "id2") @default(autoincrement())
+  userid   Int?      @default(0)
+  planid   Int?      @default(0)
+  date     DateTime? @db.Date
+  planlist planlist? @relation(fields: [planid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_completeplan_planlist")
+  user     user?     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_completeplan_user")
+
+  @@index([planid], map: "FK_completeplan_planlist")
+  @@index([userid], map: "FK_completeplan_user")
+  @@index([id], map: "id")
+}
+
+model myplan {
+  id       Int       @unique(map: "id2") @default(autoincrement())
+  userid   Int?      @default(0)
+  planid   Int?
+  icon     String?   @db.TinyText
+  mon      Int?      @default(0) @db.TinyInt
+  tue      Int?      @default(0) @db.TinyInt
+  wed      Int?      @default(0) @db.TinyInt
+  thr      Int?      @default(0) @db.TinyInt
+  fri      Int?      @default(0) @db.TinyInt
+  sat      Int?      @default(0) @db.TinyInt
+  sun      Int?      @default(0) @db.TinyInt
+  planlist planlist? @relation(fields: [planid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_myplan_planlist")
+  user     user?     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_myplan_user")
+
+  @@index([planid], map: "FK_myplan_planlist")
+  @@index([userid], map: "FK_myplan_user")
+  @@index([id], map: "id")
+}
+
+model planlist {
+  id            Int            @unique(map: "id") @default(autoincrement())
+  title         String?        @db.Text
+  content       String?        @db.Text
+  hashtag1      String?        @db.TinyText
+  hashtag2      String?        @db.TinyText
+  count         Int?
+  maxcount      Int?
+  determination String?        @db.TinyText
+  completeplan  completeplan[]
+  myplan        myplan[]
+
   @@index([id], map: "id2")
 }

@@ -78,7 +78,15 @@ body {
 
 .fc-event-title {
   padding:0px !important;
-  padding-left: 20px !important;
+  padding-left: 0px !important;
+  position: absolute !important;
+  left: 0px !important;
+  top: 0px !important;
+  font-size: 2rem !important;
+}
+
+.fc-event-main-frame {
+  position: relative !important;
 }
 
 .fc-daygrid-event{
