@@ -29,11 +29,11 @@ export default function FullCalendar({setEvents, events}) {
   const [isValid, setIsValid] = useState(false);
   const [dateError, setDateError] = useState(false);
   const [colormatch, setColormatch] = useState([
-    { id: 'a', title: 'Auditorium A', eventColor: '#EA4335' },
-    { id: 'b', title: 'Auditorium B', eventColor: '#F9AB00' },
-    { id: 'c', title: 'Auditorium C', eventColor: '#34A853' },
-    { id: 'd', title: 'Auditorium D', eventColor: '#2485F4' },
-    { id: 'e', title: 'Auditorium E', eventColor: '#888888' },
+    { id: 'a', title: 'Auditorium A', eventColor: '#ffffff' },
+    { id: 'b', title: 'Auditorium B', eventColor: '#ffffff' },
+    { id: 'c', title: 'Auditorium C', eventColor: '#ffffff' },
+    { id: 'd', title: 'Auditorium D', eventColor: '#ffffff' },
+    { id: 'e', title: 'Auditorium E', eventColor: '#ffffff' },
   ]);
   const assignedTitles = [];
 
@@ -43,11 +43,11 @@ export default function FullCalendar({setEvents, events}) {
       console.log("session", session);
       if (session.user.mode === 1) {
         setColormatch([
-          { id: 'a', title: 'Auditorium A', eventColor: '#D55E00' },
-          { id: 'b', title: 'Auditorium B', eventColor: '#E79F00' },
-          { id: 'c', title: 'Auditorium C', eventColor: '#019E73' },
-          { id: 'd', title: 'Auditorium D', eventColor: '#0072B1' },
-          { id: 'e', title: 'Auditorium E', eventColor: '#888888' },
+          { id: 'a', title: 'Auditorium A', eventColor: '#ffffff' },
+          { id: 'b', title: 'Auditorium B', eventColor: '#ffffff' },
+          { id: 'c', title: 'Auditorium C', eventColor: '#ffffff' },
+          { id: 'd', title: 'Auditorium D', eventColor: '#ffffff' },
+          { id: 'e', title: 'Auditorium E', eventColor: '#ffffff' },
         ]);
       }
     }
@@ -435,15 +435,15 @@ const handleEventDragStop = (info) => {
         eventResize={handleEventDrop}
         eventClassNames={(arg) => {
           const color = {
-            "#EA4335": [`via-[#EA4335]`, `to-[#EA4335]`],
-            "#F9AB00": [`via-[#F9AB00]`, `to-[#F9AB00]`],
-            "#34A853": [`via-[#34A853]`, `to-[#34A853]`],
-            "#2485F4": [`via-[#2485F4]`, `to-[#2485F4]`],
-            "#888888": [`via-[#888888]`, `to-[#888888]`],
-            "#D55E00": [`via-[#D55E00]`, `to-[#D55E00]`],
-            "#E79F00": [`via-[#E79F00]`, `to-[#E79F00]`],
-            "#019E73": [`via-[#019E73]`, `to-[#019E73]`],
-            "#0072B1": [`via-[#0072B1]`, `to-[#0072B1]`],
+            "#ffffff": [`via-[#ffffff]`, `to-[#ffffff]`],
+            "#ffffff": [`via-[#ffffff]`, `to-[#ffffff]`],
+            "#ffffff": [`via-[#ffffff]`, `to-[#ffffff]`],
+            "#ffffff": [`via-[#ffffff]`, `to-[#ffffff]`],
+            "#ffffff": [`via-[#ffffff]`, `to-[#ffffff]`],
+            "#ffffff": [`via-[#ffffff]`, `to-[#ffffff]`],
+            "#ffffff": [`via-[#ffffff]`, `to-[#ffffff]`],
+            "#ffffff": [`via-[#ffffff]`, `to-[#ffffff]`],
+            "#ffffff": [`via-[#ffffff]`, `to-[#ffffff]`],
           };
           if(arg.event._def.title.includes("　") && !assignedTitles.includes(arg.event._def.title)){
             assignedTitles.push(arg.event._def.title);
