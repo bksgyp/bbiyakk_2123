@@ -7,9 +7,9 @@ export default function LoginComponent({ setViewPage }) {
   return (
     <div className="flex flex-col w-full h-screen justify-center items-center">
       <div className="w-full max-w-sm text-left pl-3 text-2xl font-bold mb-2">
-        <p className="mb-2">당신에게 딱 맞춘</p>
-        <p className="mb-2">맞춤형 캘린더,</p>
-        <p className="mb-2">하나로 일정 관리 끝.</p>
+        <p className="mb-2">당신의 인생을</p>
+        <p className="mb-2">효율적으로 관리할 캘린더,</p>
+        <p className="mb-2">하나로 습관 들이기.</p>
       </div>
       <div className="text-left pl-3 w-full max-w-sm text-gray-500 mb-8 text-xs">
         일정 하나하나 놓치지 말고, 걱정없이 관리하세요!
