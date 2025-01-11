@@ -1,0 +1,22 @@
+[
+  {
+      "key": "Fine_Arts",
+      "label": "조형예술학과"
+  },
+  {
+      "key": "Design_Convergence",
+      "label": "디자인융합학과"
+  },
+  {
+      "key": "Theater_&_Film_Studies",
+      "label": "연극영화학과"
+  },
+  {
+      "key": "Kinesiology",
+      "label": "스포츠과학과"
+  },
+  {
+      "key": "Fashion_Design_&_Textiles",
+      "label": "의류디자인학과"
+  }
+]

@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+.fc-license-message {
+  display: none;
+}
+
+.fc-dayGridMonth-view {
+  font-size: 12px;
+}
+
+.fc-header-toolbar {
+  font-size: 25px !important;
+  font-weight: 700 !important;
+  margin-bottom: 17px !important;
+  margin-left: 39px !important;
+  margin-top: 3px !important;
+
+}
+
+body {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+
+.fc-toolbar-title {
+  font-size: 25px !important;
+  font-weight: 700 !important;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+  border: 0px !important;
+}
+.fc-theme-standard .fc-scrollgrid {
+  border: 0px !important;
+}
+
+
+.fc-daygrid-day-top {
+  justify-content: center !important;
+}
+
+
+
+.today-black {
+  color: black !important;
+}
+
+.current-month-gray {
+  color: #D3D4D4 !important;
+}
+
+.other-month-hidden {
+  visibility: hidden !important;
+}
+
+
+.fc-scrollgrid-sync-table > tbody > tr:nth-child(6) {
+  display: none !important;
+}
+
+.fc-day-today {
+  background-color: white !important;
+}
+
+.fc-event-title-container {
+  width: 100% !important;
+  text-align: center !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+}
+
+.fc-event-title {
+  padding:0px !important;
+  padding-left: 20px !important;
+}
+
+.fc-daygrid-event{
+  margin-top: 2px !important;
+  border-radius: 0px !important;
+}
+
+.fc-h-event {
+  border: 0px !important;
+}
+
+input, textarea {
+  font-size: 12px !important;
+}

@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model notice {
+  id          Int       @unique(map: "id") @default(autoincrement())
+  category    String?   @db.Text
+  detail      String?   @db.Text
+  major       String?   @db.Text
+  title       String?   @db.Text
+  description String?   @db.Text
+  startdate   DateTime? @db.Date
+  enddate     DateTime? @db.Date
+  link        String?   @db.Text
+
+  @@index([id], map: "id2")
+}
+
+model user {
+  id         Int        @unique(map: "id") @default(autoincrement())
+  username   String?    @db.Text
+  providerId String?    @db.Text
+  major      String?    @db.Text
+  college    String?    @db.Text
+  mode       Int?       @db.TinyInt
+  provider   String?    @db.Text
+  userplan   userplan[]
+
+  @@index([id], map: "id2")
+}
+
+model userplan {
+  id          Int       @unique(map: "id") @default(autoincrement())
+  user_id     Int?
+  category    String?   @db.Text
+  detail      String?   @db.Text
+  major       String?   @db.Text
+  title       String?   @db.Text
+  description String?   @db.Text
+  startdate   DateTime? @db.Date
+  enddate     DateTime? @db.Date
+  link        String?   @db.Text
+  user        user?     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_userplan_user")
+
+  @@index([user_id], map: "FK_userplan_user")
+  @@index([id], map: "id2")
+}

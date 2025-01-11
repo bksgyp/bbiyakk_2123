@@ -1,0 +1,22 @@
+[
+  {
+    "key": "Engineering",
+    "label": "공과대학"
+  },
+  {
+    "key": "Nature_Science",
+    "label": "자연과학대학"
+  },
+  {
+    "key": "Business",
+    "label": "경영대학"
+  },
+  {
+    "key": "Humanities",
+    "label": "문과대학"
+  },
+  {
+    "key": "Software_Convergence",
+    "label": "소프트웨어융합대학"
+  }
+]

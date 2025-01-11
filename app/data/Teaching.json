@@ -1,0 +1,26 @@
+[
+  {
+    "key": "Korean_Language_Education",
+    "label": "국어교육과"
+  },
+  {
+    "key": "English_Language_Education",
+    "label": "영어교육과"
+  },
+  {
+    "key": "Social_Studies_Education",
+    "label": "사회교육과"
+  },
+  {
+    "key": "Education",
+    "label": "교육학과"
+  },
+  {
+    "key": "Physical_Education",
+    "label": "체육교육과"
+  },
+  {
+    "key": "Mathematics_Education",
+    "label": "수학교육과"
+  }
+]

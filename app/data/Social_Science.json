@@ -1,0 +1,34 @@
+[
+  {
+    "key": "Public_Administration",
+    "label": "행정학과"
+  },
+  {
+    "key": "Political_Science_International_Relations",
+    "label": "정치외교학과"
+  },
+  {
+    "key": "Media_Communication",
+    "label": "미디어커뮤니케이션학과"
+  },
+  {
+    "key": "Economics",
+    "label": "경제학과"
+  },
+  {
+    "key": "Consumer_Science",
+    "label": "소비자학과"
+  },
+  {
+    "key": "Child_Studies",
+    "label": "아동심리학과"
+  },
+  {
+    "key": "Social_Welfare_Studies",
+    "label": "사회복지학과"
+  },
+  {
+    "key": "Future_Industry_Response",
+    "label": "기후위기대응(융합전공)"
+  }
+]

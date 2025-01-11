@@ -1,0 +1,49 @@
+{
+    "scholarships": [
+      {
+        "id": 1,
+        "type": "학부-교내장학",
+        "title": "[학부-교내장학] 2024학년도 2학기 장학사정관제 장학금 선발 안내",
+        "description": "인하대학교에서는 장학금 지급 다각화를 통한 장학금 사각지대를 해소하고 학생 상황에 따른 맞춤형 장학금 지급을 위해 2024학년도 2학기 장학사정관제 특별장학금을 시행하오니 많은 학생들의 관심과 신청 부탁드립니다.",
+        "start-date": "2024.11.11.",
+        "deadline": "2024.11.22.",
+        "link": "https://www.inha.ac.kr/kr/950/subview.do?&enc=Zm5jdDF8QEB8JTJGYmJzJTJGa3IlMkY4JTJGMzkwNDYlMkZhcnRjbFZpZXcuZG8lM0ZwYWdlJTNEMSUyNnNyY2hDb2x1bW4lM0RhbGwlMjZzcmNoV3JkJTNEJTI2YmJzQ2xTZXElM0QyMTUlMjZiYnNPcGVuV3JkU2VxJTNEJTI2cmdzQmduZGVTdHIlM0QlMjZyZ3NFbmRkZVN0ciUzRCUyNmlzVmlld01pbmUlM0RmYWxzZSUyNnBhc3N3b3JkJTNEJTI2"
+      },
+      {
+        "id": 2,
+        "type": "학부-국가장학",
+        "title": "[학부-국가장학] 2024년 국가우수(인문100년, 예술체육비전)장학금 한학기지원 장학생 선발",
+        "description": "[학부-국가장학] 2024년 국가우수(인문100년, 예술체육비전)장학금 한학기지원 장학생 선발",
+        "start-date": "2024.11.06.",
+        "deadline": "2024.11.13.",
+        "link": "https://www.inha.ac.kr/kr/950/subview.do?&enc=Zm5jdDF8QEB8JTJGYmJzJTJGa3IlMkY4JTJGMzkwMzklMkZhcnRjbFZpZXcuZG8lM0ZwYWdlJTNEMSUyNnNyY2hDb2x1bW4lM0RhbGwlMjZzcmNoV3JkJTNEJTI2YmJzQ2xTZXElM0QyMTUlMjZiYnNPcGVuV3JkU2VxJTNEJTI2cmdzQmduZGVTdHIlM0QlMjZyZ3NFbmRkZVN0ciUzRCUyNmlzVmlld01pbmUlM0RmYWxzZSUyNnBhc3N3b3JkJTNEJTI2"
+      },
+      {
+        "id": 3,
+        "type": "학부-국가근로",
+        "title": "[학부-국가근로] 2024학년도 국가근로장학사업 동계방학 집중근로 프로그램 안내",
+        "description": "한국장학재단은 국가근로장학생이 방학기간 중 지속적으로 자기역량 개발을 할 수 있도록 교외 근로지를 제공하는 『동계방학 집중근로 프로그램』을 운영합니다.",
+        "start-date": "2024.11.11.",
+        "deadline": "2024.11.20.",
+        "link": "https://www.inha.ac.kr/kr/950/subview.do?&enc=Zm5jdDF8QEB8JTJGYmJzJTJGa3IlMkY4JTJGMzkwMzglMkZhcnRjbFZpZXcuZG8lM0ZwYWdlJTNEMSUyNnNyY2hDb2x1bW4lM0RhbGwlMjZzcmNoV3JkJTNEJTI2YmJzQ2xTZXElM0QyMTUlMjZiYnNPcGVuV3JkU2VxJTNEJTI2cmdzQmduZGVTdHIlM0QlMjZyZ3NFbmRkZVN0ciUzRCUyNmlzVmlld01pbmUlM0RmYWxzZSUyNnBhc3N3b3JkJTNEJTI2"
+      },
+      {
+        "id": 4,
+        "type": "학부-교외장학",
+        "title": "[학부-교외장학] 2025학년도 SK행복나눔재단 Sunny Scholar 프로그램 안내",
+        "description": "2025학년도 SK행복나눔재단 Sunny Scholar 프로그램 안내",
+        "start-date": "2024.11.05.",
+        "deadline": "2024.11.24.",
+        "link": "https://www.inha.ac.kr/kr/950/subview.do?&enc=Zm5jdDF8QEB8JTJGYmJzJTJGa3IlMkY4JTJGMzkwMTglMkZhcnRjbFZpZXcuZG8lM0ZwYWdlJTNEMSUyNnNyY2hDb2x1bW4lM0RhbGwlMjZzcmNoV3JkJTNEJTI2YmJzQ2xTZXElM0QyMTUlMjZiYnNPcGVuV3JkU2VxJTNEJTI2cmdzQmduZGVTdHIlM0QlMjZyZ3NFbmRkZVN0ciUzRCUyNmlzVmlld01pbmUlM0RmYWxzZSUyNnBhc3N3b3JkJTNEJTI2"
+      },
+      {
+        "id": 5,
+        "type": "학부-교외장학",
+        "title": "[학부-교외장학] 2024년도 하반기 재외동포 자녀 지원 장학생 선발 공고 안내",
+        "description": "2024년도 하반기 재외동포 자녀 지원 장학생 선발 공고 안내",
+        "start-date": "2024.11.04.",
+        "deadline": "2024.11.12.",
+        "link": "https://www.inha.ac.kr/kr/950/subview.do?&enc=Zm5jdDF8QEB8JTJGYmJzJTJGa3IlMkY4JTJGMzkwMDQlMkZhcnRjbFZpZXcuZG8lM0ZwYWdlJTNEMSUyNnNyY2hDb2x1bW4lM0RhbGwlMjZzcmNoV3JkJTNEJTI2YmJzQ2xTZXElM0QyMTUlMjZiYnNPcGVuV3JkU2VxJTNEJTI2cmdzQmduZGVTdHIlM0QlMjZyZ3NFbmRkZVN0ciUzRCUyNmlzVmlld01pbmUlM0RmYWxzZSUyNnBhc3N3b3JkJTNEJTI2"
+      }
+    ]
+  }
