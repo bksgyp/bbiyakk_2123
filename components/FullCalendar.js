@@ -650,7 +650,7 @@ const handleEventDragStop = (info) => {
                     <div className='px-0'>
                       <div className="flex flex-row border-1 border-black rounded-lg p-2 mb-2">
                         <div className="flex justify-center items-center text-3xl">
-                          🎨
+                          😏
                         </div>
                         <div className="flex flex-col pl-2 w-full">
                           <p className="text-2xl font-bold">삐약이</p>
@@ -666,7 +666,7 @@ const handleEventDragStop = (info) => {
                     <div className='px-0'>
                       <div className="flex flex-row border-1 border-black rounded-lg p-2 mb-2">
                         <div className="flex justify-center items-center text-3xl">
-                          🎭
+                          🤨
                         </div>
                         <div className="flex flex-col pl-2 w-full">
                           <p className="text-2xl font-bold">뺙뺙</p>
@@ -678,7 +678,7 @@ const handleEventDragStop = (info) => {
                       </div>
                       <div className="flex flex-row border-1 border-black rounded-lg p-2 mb-2">
                         <div className="flex justify-center items-center text-3xl">
-                          🎸
+                          😢
                         </div>
                         <div className="flex flex-col pl-2 w-full">
                           <p className="text-2xl font-bold">뺘약</p>
