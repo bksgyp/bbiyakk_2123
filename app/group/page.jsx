@@ -28,6 +28,7 @@ export default function GroupPage() {
     const [pledge, setPledge] = useState(globalPledge);
     const [progress, setProgress] = React.useState(75); // 원하는 진행률 값 (0-100)
     const [selectedGroup, setSelectedGroup] = useState(new Set(["전체"]));
+    const [showModal, setShowModal] = useState(false);
 
     const selectedValue = React.useMemo(
         () => Array.from(selectedGroup).join(', ').replace(/_/g, ''),
@@ -290,9 +291,71 @@ export default function GroupPage() {
                 )}
             </ModalContent>
         </Modal>
-        <div className='absolute bottom-16 right-3 w-14 h-14 bg-blue-500 rounded-full z-50'>
-            
+        <div className='absolute bottom-16 right-3 w-14 h-14 bg-blue-500 rounded-full z-40 text-2xl font-bold text-white flex justify-center items-center'
+            onClick={()=>{
+                setShowModal(true);
+            }}
+        >
+            C
         </div>
+        {showModal && (
+        <div className='absolute top-0 left-0 w-full h-full bg-red-500 z-50'>
+            <div className='flex flex-col w-full h-screen bg-white relative'>
+                <div className='flex w-full justify-end'>
+                    <button 
+                        className='w-10 h-10 bg-gray-200 rounded-full'
+                        onClick={()=>{
+                            setShowModal(false);
+                        }}
+                    >X</button>
+                </div>
+                <div className='flex w-full justify-start mb-4'>
+                    <div id='partner-messagebox' className=' bg-gray-200 pl-4 mb-2 ml-4 h-12 rounded-xl text-xl pr-4 flex items-center'>
+                        <p>오늘도 수고하셨어요~!</p>
+                    </div>
+                </div>
+                <div className='flex w-full justify-end mb-4'>
+                    <div id='my-messagebox' className='h-12 bg-blue-400 text-white pr-4 mr-4 mb-2 text-end rounded-xl text-xl pl-4 flex items-center'>
+                        <p>님은 왜 수고 안해요;;</p>
+                    </div>
+                </div>
+                <div className='flex w-full justify-start mb-4'>
+                    <div id='partner-messagebox' className=' bg-gray-200 pl-4 mb-2 ml-4 h-12 rounded-xl text-xl pr-4 flex items-center'>
+                        <p>미안요,,^^;;</p>
+                    </div>
+                </div>
+                <div className='flex w-full justify-end mb-4'>
+                    <div id='my-messagebox' className='h-12 bg-blue-400 text-white pr-4 mr-4 mb-2 text-end rounded-xl text-xl pl-4 flex items-center'>
+                        <p>아니에요 수고하셨어요!! ㅎㅎ</p>
+                    </div>
+                </div>
+                <div className='flex w-full justify-start mb-4'>
+                    <div id='partner-messagebox' className=' bg-gray-200 pl-4 mb-2 ml-4 h-12 rounded-xl text-xl pr-4 flex items-center'>
+                        <p>내일은 더 힘차게 같이 해봐요!!</p>
+                    </div>
+                </div>
+                <div className='flex w-full justify-end mb-4'>
+                    <div id='my-messagebox' className='h-12 bg-blue-400 text-white pr-4 mr-4 mb-2 text-end rounded-xl text-xl pl-4 flex items-center'>
+                        <p>네 좋아요~! 내일 뵈어요!</p>
+                    </div>
+                </div>
+                <div className='flex w-full justify-start mb-4'>
+                    <div id='partner-messagebox' className=' bg-gray-200 pl-4 mb-2 ml-4 h-12 rounded-xl text-xl pr-4 flex items-center'>
+                        <p>내일 같이 점심 드시는건 어떤가요?</p>
+                    </div>
+                </div>
+                <div className='flex w-full justify-end mb-4'>
+                    <div id='my-messagebox' className='h-12 bg-blue-400 text-white pr-4 mr-4 mb-2 text-end rounded-xl text-xl pl-4 flex items-center'>
+                        <p>네 같이 먹죠~!</p>
+                    </div>
+                </div>
+                <div className='absolute bottom-0 left-0 w-full h-11 items-center justify-center flex flex-row'>
+                    <input className='w-full h-full bg-gray-200 rounded-xl'></input>
+                    <button className='w-10 h-10 bg-gray-200 rounded-full'>전송</button>
+                </div>
+            </div>
+            </div>
+        )}
         </div>
     );
     }
