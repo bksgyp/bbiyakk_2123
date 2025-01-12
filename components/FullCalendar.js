@@ -31,6 +31,7 @@ export default function FullCalendar({setEvents, events, virtualdata, setVirtual
   const [dateError, setDateError] = useState(false);
   const [fullplan, setFullplan] = useState([]);
   const [virtualfullplan, setVirtualfullplan] = useState([]);
+  const [specialValue, setSpecialValue] = useState(false);
   //const [virtualdata, setVirtualdata] = useState([]);
   const [colormatch, setColormatch] = useState([
     { id: 'a', title: 'Auditorium A', eventColor: '#ffffff' },
@@ -400,6 +401,7 @@ const handleEventDragStop = (info) => {
   };
 
   const handleModalClose = () => {
+    setSpecialValue(!specialValue);
     setIsAddingEvent(false);
     onOpenChange(false);
   };
@@ -410,6 +412,12 @@ const handleEventDragStop = (info) => {
       calendarApi.refetchEvents();
     }
   }, [events]);
+
+  useEffect(()=>{
+    if(window.location.pathname === '/group'){
+      setSpecialValue(true);
+    }
+  }, [window.location.pathname]);
 
 
 
@@ -479,22 +487,25 @@ const handleEventDragStop = (info) => {
               if(cnt.length == 0 && info.date < new Date()){
                 const customNumber = document.createElement('div');
                 customNumber.className = 'custom-number';
-                customNumber.innerText = `${completecnt}/${totalcnt}`; // 원하는 숫자를 입력하세요
+                const randomNum1 = Math.floor(Math.random() * 5); // 0-4 사이 랜덤 숫자
+                const randomNum2 = randomNum1 + Math.floor(Math.random() * 3) + 1; // randomNum1보다 1-3 큰 숫자
+                customNumber.innerText = `${randomNum1}/${randomNum2}`;
                 info.el.getElementsByClassName("fc-daygrid-day-events")[0].appendChild(customNumber);
               }
             }
             
-
-            let cnt22 = info.el.getElementsByClassName("fc-daygrid-day-events");
-            //console.log("cnt22", cnt22);
-            let cnt222 = cnt22[0].getElementsByClassName("fc-daygrid-event-harness");
-            //console.log("cnt222", cnt222);
-            if(cnt222.length >= 2) {
-              //console.log("cnt222.length", cnt222.length);
-              const customNumber2 = document.createElement('div');
-              customNumber2.className = 'custom-number2';
-              customNumber2.innerText = `+${cnt222.length-1}`; // 원하는 숫자를 입력하세요
-              cnt22[0].getElementsByClassName("fc-daygrid-event-harness")[0].appendChild(customNumber2);
+            if(window.location.pathname !== '/group'){
+              let cnt22 = info.el.getElementsByClassName("fc-daygrid-day-events");
+              //console.log("cnt22", cnt22);
+              let cnt222 = cnt22[0].getElementsByClassName("fc-daygrid-event-harness");
+              //console.log("cnt222", cnt222);
+              if(cnt222.length >= 2) {
+                //console.log("cnt222.length", cnt222.length);
+                const customNumber2 = document.createElement('div');
+                customNumber2.className = 'custom-number2';
+                customNumber2.innerText = `+${cnt222.length-1}`; // 원하는 숫자를 입력하세요
+                cnt22[0].getElementsByClassName("fc-daygrid-event-harness")[0].appendChild(customNumber2);
+              }
             }
 
 
@@ -632,7 +643,55 @@ const handleEventDragStop = (info) => {
                       />
                     </div>
                   </div>
-                ) : (
+                ) : 
+                specialValue ? (<>
+                  <div className='flex flex-col'>
+                    <p className='text-sm mb-[10px] font-bold text-[#888888]'>완료한 인원</p>
+                    <div className='px-0'>
+                      <div className="flex flex-row border-1 border-black rounded-lg p-2 mb-2">
+                        <div className="flex justify-center items-center text-3xl">
+                          🎨
+                        </div>
+                        <div className="flex flex-col pl-2 w-full">
+                          <p className="text-2xl font-bold">삐약이</p>
+                          <p className="text-base text-[#888888]">나는야 갓생러</p>
+                        </div>
+                        <div className="flex justify-end items-center">
+                          <Checkbox isSelected isDisabled />
+                        </div>
+                      </div>
+                    </div>
+                    <Divider className='my-5'/>
+                    <p className='text-sm mb-[10px] font-bold text-[#888888]'>미완료 인원</p>
+                    <div className='px-0'>
+                      <div className="flex flex-row border-1 border-black rounded-lg p-2 mb-2">
+                        <div className="flex justify-center items-center text-3xl">
+                          🎭
+                        </div>
+                        <div className="flex flex-col pl-2 w-full">
+                          <p className="text-2xl font-bold">뺙뺙</p>
+                          <p className="text-base text-[#888888]">작심삼일탈출기</p>
+                        </div>
+                        <div className="flex justify-end items-center">
+                          <Checkbox />
+                        </div>
+                      </div>
+                      <div className="flex flex-row border-1 border-black rounded-lg p-2 mb-2">
+                        <div className="flex justify-center items-center text-3xl">
+                          🎸
+                        </div>
+                        <div className="flex flex-col pl-2 w-full">
+                          <p className="text-2xl font-bold">뺘약</p>
+                          <p className="text-base text-[#888888]">올해는 꼭 갓생</p>
+                        </div>
+                        <div className="flex justify-end items-center">
+                          <Checkbox />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>):
+                (
                   <div className='flex flex-col'>
                     <p className='text-sm mb-[10px] font-bold text-[#888888]'>완료한 소모임</p>
                     <div className='px-0'>
@@ -733,7 +792,34 @@ const handleEventDragStop = (info) => {
                               </p>
                             </div>
                             <div className="flex justify-end items-center">
-                                <Checkbox
+                                <Checkbox 
+                                  onValueChange={() => {
+                                    //체크박스 클릭시 /completeplan 에 post 요청으로 완료 체크 후 새로고침 fetch 로 요청, 보내는 정보는 event.title, event.rtitle, event.start
+                                    fetch('/api/completeplan', {
+                                      method: 'POST', 
+                                      headers: {
+                                        'Content-Type': 'application/json',
+                                      },
+                                      body: JSON.stringify({
+                                        title: event.title,
+                                        rtitle: event.rtitle,
+                                        start: new Date(new Date(event.start).setDate(new Date(event.start).getDate() + 1)),
+                                      }),
+                                    }).then(response => {
+                                      if(response.ok) {
+                                        window.location.reload();
+                                      } else {
+                                        console.error('Error completing event:', response);
+                                      }
+                                    });
+                                    if(response.ok){
+                                      window.location.reload();
+                                    }
+                                    else{
+                                      console.error('Error completing event:', response);
+                                    }
+
+                                  }}
                                 />
                             </div>
                           </div>

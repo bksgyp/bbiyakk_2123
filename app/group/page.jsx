@@ -27,6 +27,12 @@ export default function GroupPage() {
     const { globalPledge, setGlobalPledge } = usePledge();
     const [pledge, setPledge] = useState(globalPledge);
     const [progress, setProgress] = React.useState(75); // 원하는 진행률 값 (0-100)
+    const [selectedGroup, setSelectedGroup] = useState(new Set(["전체"]));
+
+    const selectedValue = React.useMemo(
+        () => Array.from(selectedGroup).join(', ').replace(/_/g, ''),
+        [selectedGroup],
+    );
 
     const days = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -147,18 +153,36 @@ export default function GroupPage() {
                     </Button>
                 </div>
                 <div>
-                    <p id="dazim">주 2회 화,금</p>
+                    <p id="dazim">
+                      {(() => {
+                        switch(selectedValue) {
+                          case '북북독서왕':
+                            return '주 3일 월, 수, 금';
+                          case 'running': 
+                            return '주 2일 화, 목';
+                          case '영어 배우쟈':
+                            return '주 2일 토, 일';
+                          default:
+                            return '주 2일 화,금';
+                        }
+                      })()}
+                    </p>
                 </div>
                 <Dropdown>
                     <DropdownTrigger>
                         <span className="text-sm text-gray-500 cursor-pointer">
-                            전체 ▼
+                            {selectedValue} ▼
                         </span>
                     </DropdownTrigger>
-                    <DropdownMenu aria-label="Calendar Actions">
-                        <DropdownItem key="personal">개인 일정</DropdownItem>
-                        <DropdownItem key="work">업무 일정</DropdownItem>
-                        <DropdownItem key="family">가족 일정</DropdownItem>
+                    <DropdownMenu aria-label="Calendar Actions"
+                        selectedKeys={selectedGroup}
+                        onSelectionChange={setSelectedGroup}
+                        selectionMode="single"
+                        
+                    >
+                        <DropdownItem key="북북독서왕">북북독서왕</DropdownItem>
+                        <DropdownItem key="running">running</DropdownItem>
+                        <DropdownItem key="영어 배우쟈">영어 배우쟈</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
             </div>
@@ -266,6 +290,9 @@ export default function GroupPage() {
                 )}
             </ModalContent>
         </Modal>
+        <div className='absolute bottom-16 right-3 w-14 h-14 bg-blue-500 rounded-full z-50'>
+            
+        </div>
         </div>
     );
     }

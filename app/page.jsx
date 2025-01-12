@@ -80,9 +80,9 @@ export default function Home() {
               </span>
             </DropdownTrigger>
             <DropdownMenu aria-label="Calendar Actions">
-              <DropdownItem key="personal">개인 일정</DropdownItem>
-              <DropdownItem key="work">업무 일정</DropdownItem>
-              <DropdownItem key="family">가족 일정</DropdownItem>
+              <DropdownItem key="personal">북북독서왕</DropdownItem>
+              <DropdownItem key="work">running</DropdownItem>
+              <DropdownItem key="family">영어 배우쟈</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
